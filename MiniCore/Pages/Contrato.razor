@@ -1,0 +1,70 @@
+﻿@page "/Contratos"
+@using MiniCore.Data
+@using MiniCore.Servicios
+
+
+@inject ContratosService contratosserv
+@inject NavigationManager navegate
+<h3>Contratos</h3>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Id Cliente
+            </th>
+            <th>
+                Contrato
+            </th>
+            <th>
+                 Monto
+            </th>
+            <th>
+                Fecha
+            </th>
+           
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ListaContratos)
+        {
+            <tr>
+                <td>
+                    @item.idContratos
+                </td>
+                <td>
+                    @item.idCliente
+                </td>
+                <td>
+                    @item.nombreContrato
+                </td>
+                <td>
+                    @item.monto
+                </td>
+                <td>
+                    @item.fecha
+                </td>
+               
+           
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code{
+    List<Contratos> ListaContratos;
+    protected override async Task OnInitializedAsync()
+    {
+
+        await base.OnInitializedAsync();
+
+        ListaContratos = contratosserv.GetAllContratos();
+    }
+  
+}

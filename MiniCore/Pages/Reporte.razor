@@ -1,5 +1,84 @@
-﻿<h3>Reporte</h3>
+﻿@page "/Reporte"
+@using Microsoft.AspNetCore.Authorization
+@using MiniCore.Data
+@using MiniCore.Servicios
+
+
+@inject ContratosService contratosserv
+@inject ClienteService clienteserv
+
+@inject NavigationManager navegate
+<h3>Reporte </h3>
+
+<tr>
+    <td>Fecha Inicio: </td>
+    <td><input type="text" @bind="@FechaInicio" /> </td>
+    <td>Fecha Fin: </td>
+    <td><input type="text" @bind="@FechaFin" /> </td>
+
+    <button @onclick="@Buscar">Aplicar Filtro  </button>
+
+
+
+
+</tr>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Cliente
+            </th>
+
+            <th>
+                Montos
+            </th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var contrato in ListaContratos)
+        {
+            <tr>
+
+                <td>
+                    @contrato.nombre
+                </td>
+                <td>
+                    @contrato.montofinal
+
+                </td>
+
+
+            </tr>
+        }
+        <tr>
+
+            <td>
+                total 
+            </td>
+            <td>
+                @CantidadTotal
+
+            </td>
+
+
+        </tr>
+    </tbody>
+</table>
+
 
 @code {
+        DateTime FechaInicio { get; set; }
+        DateTime FechaFin { get; set; }
+        decimal CantidadTotal { get; set; } = 0;
+
+        List<ContratosFiltrados> ListaContratos = new();
+
+        private async Task Buscar()
+        {
+            ListaContratos = await contratosserv.RetornarLista(FechaInicio, FechaFin);
+            CantidadTotal = ListaContratos.Select(c => c.montofinal).Sum();
+        }
 
 }

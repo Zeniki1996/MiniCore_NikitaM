@@ -47,13 +47,12 @@ namespace MiniCore.Servicios
         public async Task<List<ContratosFiltrados>> RetornarLista(DateTime fechainicio, DateTime fechafin)
         {
 
-            var proyecto = await context.Contratos.Where(p => p.fecha >= fechainicio && p.fecha <= fechafin )
-            .GroupBy(p => p.idContratos).Select(g => new ContratosFiltrados
-            {
-                IdContratos = g.Key,
-                nombre = context.Cliente.FirstOrDefault(c => c.idCliente == g.Key).nombre,
-                contratos = g.ToList()
-            }).ToListAsync();
+            var proyecto = await context.Contratos.Where(p => p.fecha >= fechainicio && p.fecha <= fechafin)
+                .GroupBy(p => p.idCliente, (x, y) => new ContratosFiltrados
+                {
+                    nombre = context.Cliente.FirstOrDefault(p => p.idCliente == x).nombre,
+                    montofinal = y.Select(p => p.montos).Sum()
+                }).ToListAsync();
 
             return proyecto;
         }

@@ -8,7 +8,7 @@ namespace MiniCore.Data
         public int idContratos { get; set; }
         public int idCliente { get; set; }
         public string nombreContrato { get; set; }
-        public float monto { get; set; }
+        public decimal montos { get; set; }
         public DateTime? fecha{ get; set; }
     }
 }
